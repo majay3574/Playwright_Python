@@ -1,0 +1,16 @@
+{
+  "name": "playwright-pom-framework",
+  "private": true,
+  "scripts": {
+    "test": "python -m pytest tests/",
+    "test:chrome": "python -m pytest tests/ --browser=chromium",
+    "test:firefox": "python -m pytest tests/ --browser=firefox",
+    "test:safari": "python -m pytest tests/ --browser=webkit",
+    "createLead": "python -m pytest tests/test_create_lead.py --browser=chromium"
+
+  },
+  "dependencies": {
+    "python-shell": "^3.0.1"
+  },
+  "devDependencies": {}
+}
