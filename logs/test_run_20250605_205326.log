@@ -1,0 +1,13 @@
+2025-06-05 20:53:26,001 - root - INFO - Logger initialized. Log file: C:\Users\AjayMichael\pyPlaywright\logs\test_run_20250605_205326.log
+2025-06-05 20:53:28,350 - root - INFO - Starting test with chromium browser
+2025-06-05 20:53:28,351 - pages.base_page - INFO - Navigating to: http://leaftaps.com/opentaps/control/login
+2025-06-05 20:53:30,664 - pages.base_page - INFO - Asserting element is visible: #username
+2025-06-05 20:53:30,767 - pages.base_page - INFO - Performing login with username: DemoSalesManager
+2025-06-05 20:53:30,767 - pages.base_page - INFO - Filling text in element #username: DemoSalesManager
+2025-06-05 20:53:30,846 - pages.base_page - INFO - Filling text in element #password: crmsfa
+2025-06-05 20:53:30,925 - pages.base_page - INFO - Clicking element: .decorativeSubmit
+2025-06-05 20:53:31,146 - pages.base_page - INFO - Clicking element: //a[contains(text(),'CRM/SFA')]
+2025-06-05 20:53:31,556 - root - WARNING - Console error: Failed to load resource: the server responded with a status of 400 ()
+2025-06-05 20:53:31,782 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 20:53:37,106 - root - ERROR - Test failed. Screenshot saved to: screenshots\test_create_new_lead[chromium].png
+2025-06-05 20:53:38,087 - root - INFO - Closed browser after test

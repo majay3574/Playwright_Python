@@ -59,7 +59,6 @@ Run all tests:
 ```bash
 npm test
 ```
-
 Run tests in a specific browser:
 
 ```bash

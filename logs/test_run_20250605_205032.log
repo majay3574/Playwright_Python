@@ -1,0 +1,63 @@
+2025-06-05 20:50:32,226 - root - INFO - Logger initialized. Log file: C:\Users\AjayMichael\pyPlaywright\logs\test_run_20250605_205032.log
+2025-06-05 20:50:37,547 - root - INFO - Starting test with chromium browser
+2025-06-05 20:50:37,548 - pages.base_page - INFO - Navigating to: http://leaftaps.com/opentaps/control/login
+2025-06-05 20:50:39,000 - pages.base_page - INFO - Asserting element is visible: #username
+2025-06-05 20:50:39,098 - pages.base_page - INFO - Performing login with username: DemoSalesManager
+2025-06-05 20:50:39,099 - pages.base_page - INFO - Filling text in element #username: DemoSalesManager
+2025-06-05 20:50:39,180 - pages.base_page - INFO - Filling text in element #password: crmsfa
+2025-06-05 20:50:39,327 - pages.base_page - INFO - Clicking element: .decorativeSubmit
+2025-06-05 20:50:39,769 - pages.base_page - INFO - Clicking element: //a[contains(text(),'CRM/SFA')]
+2025-06-05 20:50:40,016 - root - WARNING - Console error: Failed to load resource: the server responded with a status of 400 ()
+2025-06-05 20:50:40,309 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 20:50:46,309 - root - ERROR - Test failed. Screenshot saved to: screenshots\test_create_new_lead[chromium].png
+2025-06-05 20:50:47,086 - root - INFO - Closed browser after test
+2025-06-05 20:50:49,770 - root - INFO - Starting test with chromium browser
+2025-06-05 20:50:49,771 - pages.base_page - INFO - Navigating to: http://leaftaps.com/opentaps/control/login
+2025-06-05 20:50:51,062 - pages.base_page - INFO - Asserting element is visible: #username
+2025-06-05 20:50:51,183 - pages.base_page - INFO - Performing login with username: DemoSalesManager
+2025-06-05 20:50:51,184 - pages.base_page - INFO - Filling text in element #username: DemoSalesManager
+2025-06-05 20:50:51,264 - pages.base_page - INFO - Filling text in element #password: crmsfa
+2025-06-05 20:50:51,408 - pages.base_page - INFO - Clicking element: .decorativeSubmit
+2025-06-05 20:50:51,649 - pages.base_page - INFO - Clicking element: //a[contains(text(),'CRM/SFA')]
+2025-06-05 20:50:52,175 - root - WARNING - Console error: Failed to load resource: the server responded with a status of 400 ()
+2025-06-05 20:50:52,340 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 20:50:54,815 - pages.base_page - INFO - Clicking element: //a[text()='Create Lead']
+2025-06-05 20:50:56,339 - pages.base_page - INFO - Creating new lead: TestOAKd UseroRIZ
+2025-06-05 20:50:56,340 - pages.base_page - INFO - Filling text in element #createLeadForm_companyName: Company QNNQr
+2025-06-05 20:50:57,606 - pages.base_page - INFO - Filling text in element #createLeadForm_firstName: TestOAKd
+2025-06-05 20:50:57,804 - pages.base_page - INFO - Filling text in element #createLeadForm_lastName: UseroRIZ
+2025-06-05 20:50:57,924 - pages.base_page - INFO - Selecting option LEAD_EMPLOYEE from dropdown #createLeadForm_dataSourceId
+2025-06-05 20:50:58,024 - pages.base_page - INFO - Selecting option IND_SOFTWARE from dropdown #createLeadForm_industryEnumId
+2025-06-05 20:50:58,114 - pages.base_page - INFO - Filling text in element #createLeadForm_primaryPhoneNumber: 896-774-9122
+2025-06-05 20:50:58,232 - pages.base_page - INFO - Filling text in element #createLeadForm_primaryEmail: ZTNmhDwf@iefbes.com
+2025-06-05 20:50:58,333 - pages.base_page - INFO - Clicking element: input[name='submitButton']
+2025-06-05 20:51:31,723 - pages.base_page - ERROR - Failed to get text from element #viewLead_generalProfId_sp: Page.text_content: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("#viewLead_generalProfId_sp")
+
+2025-06-05 20:51:34,060 - root - ERROR - Test failed. Screenshot saved to: screenshots\test_create_and_find_lead[chromium].png
+2025-06-05 20:51:37,225 - root - INFO - Closed browser after test
+2025-06-05 20:51:39,538 - root - INFO - Starting test with chromium browser
+2025-06-05 20:51:39,539 - pages.base_page - INFO - Navigating to: http://leaftaps.com/opentaps/control/login
+2025-06-05 20:51:40,901 - pages.base_page - INFO - Asserting element is visible: #username
+2025-06-05 20:51:41,125 - pages.base_page - INFO - Performing login with username: DemoSalesManager
+2025-06-05 20:51:41,126 - pages.base_page - INFO - Filling text in element #username: DemoSalesManager
+2025-06-05 20:51:41,272 - pages.base_page - INFO - Filling text in element #password: crmsfa
+2025-06-05 20:51:41,485 - pages.base_page - INFO - Clicking element: .decorativeSubmit
+2025-06-05 20:51:41,989 - pages.base_page - INFO - Clicking element: //a[contains(text(),'CRM/SFA')]
+2025-06-05 20:51:42,303 - root - WARNING - Console error: Failed to load resource: the server responded with a status of 400 ()
+2025-06-05 20:51:42,490 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 20:51:44,850 - pages.base_page - INFO - Clicking element: //a[text()='Create Lead']
+2025-06-05 20:51:46,513 - pages.base_page - INFO - Creating new lead: TestvjfV UserZCSr
+2025-06-05 20:51:46,513 - pages.base_page - INFO - Filling text in element #createLeadForm_companyName: Company dDnrm
+2025-06-05 20:51:47,377 - pages.base_page - INFO - Filling text in element #createLeadForm_firstName: TestvjfV
+2025-06-05 20:51:47,715 - pages.base_page - INFO - Filling text in element #createLeadForm_lastName: UserZCSr
+2025-06-05 20:51:47,820 - pages.base_page - INFO - Selecting option LEAD_EMPLOYEE from dropdown #createLeadForm_dataSourceId
+2025-06-05 20:51:47,922 - pages.base_page - INFO - Selecting option IND_SOFTWARE from dropdown #createLeadForm_industryEnumId
+2025-06-05 20:51:48,005 - pages.base_page - INFO - Filling text in element #createLeadForm_primaryPhoneNumber: 197-831-9314
+2025-06-05 20:51:48,111 - pages.base_page - INFO - Filling text in element #createLeadForm_primaryEmail: OaULrjuJ@pxmpry.com
+2025-06-05 20:51:48,230 - pages.base_page - INFO - Clicking element: input[name='submitButton']
+2025-06-05 20:51:51,280 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 20:51:52,988 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 20:51:54,186 - pages.base_page - INFO - Clicking element: //a[text()='Find Leads']
+2025-06-05 20:51:55,568 - pages.base_page - INFO - Filling text in element //input[@name='firstName']: TestvjfV

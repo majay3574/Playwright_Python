@@ -6,6 +6,7 @@ import os
 import pytest
 from datetime import datetime
 from playwright.sync_api import sync_playwright, Error
+import pytest_html
 from utils.logger import setup_logger
 
 logger = setup_logger()

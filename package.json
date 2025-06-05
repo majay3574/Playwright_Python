@@ -6,7 +6,7 @@
     "test:chrome": "python -m pytest tests/ --browser=chromium",
     "test:firefox": "python -m pytest tests/ --browser=firefox",
     "test:safari": "python -m pytest tests/ --browser=webkit",
-    "createLead": "python -m pytest tests/test_create_lead.py --browser=chromium"
+    "createLead": "python -m pytest tests/test_create_lead.py --html=report.html --self-contained-html"
 
   },
   "dependencies": {

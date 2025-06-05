@@ -1,0 +1,39 @@
+2025-06-05 21:00:43,016 - root - INFO - Logger initialized. Log file: C:\Users\AjayMichael\pyPlaywright\logs\test_run_20250605_210043.log
+2025-06-05 21:00:46,443 - root - INFO - Starting test with chromium browser
+2025-06-05 21:00:46,444 - pages.base_page - INFO - Navigating to: http://leaftaps.com/opentaps/control/login
+2025-06-05 21:00:47,696 - pages.base_page - INFO - Asserting element is visible: #username
+2025-06-05 21:00:47,810 - pages.base_page - INFO - Performing login with username: DemoSalesManager
+2025-06-05 21:00:47,810 - pages.base_page - INFO - Filling text in element #username: DemoSalesManager
+2025-06-05 21:00:47,890 - pages.base_page - INFO - Filling text in element #password: crmsfa
+2025-06-05 21:00:47,961 - pages.base_page - INFO - Clicking element: .decorativeSubmit
+2025-06-05 21:00:48,187 - pages.base_page - INFO - Clicking element: //a[contains(text(),'CRM/SFA')]
+2025-06-05 21:00:48,610 - root - WARNING - Console error: Failed to load resource: the server responded with a status of 400 ()
+2025-06-05 21:00:48,868 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 21:00:53,685 - root - ERROR - Test failed. Screenshot saved to: screenshots\test_create_new_lead[chromium].png
+2025-06-05 21:00:54,917 - root - INFO - Closed browser after test
+2025-06-05 21:00:56,975 - root - INFO - Starting test with chromium browser
+2025-06-05 21:00:56,975 - pages.base_page - INFO - Navigating to: http://leaftaps.com/opentaps/control/login
+2025-06-05 21:00:58,088 - pages.base_page - INFO - Asserting element is visible: #username
+2025-06-05 21:00:58,203 - pages.base_page - INFO - Performing login with username: DemoSalesManager
+2025-06-05 21:00:58,203 - pages.base_page - INFO - Filling text in element #username: DemoSalesManager
+2025-06-05 21:00:58,284 - pages.base_page - INFO - Filling text in element #password: crmsfa
+2025-06-05 21:00:58,368 - pages.base_page - INFO - Clicking element: .decorativeSubmit
+2025-06-05 21:00:58,625 - pages.base_page - INFO - Clicking element: //a[contains(text(),'CRM/SFA')]
+2025-06-05 21:00:59,112 - root - WARNING - Console error: Failed to load resource: the server responded with a status of 400 ()
+2025-06-05 21:00:59,333 - pages.base_page - INFO - Clicking element: //a[text()='Leads']
+2025-06-05 21:01:01,092 - pages.base_page - INFO - Clicking element: //a[text()='Create Lead']
+2025-06-05 21:01:02,615 - pages.base_page - INFO - Creating new lead: TestpSfW UserKeWY
+2025-06-05 21:01:02,616 - pages.base_page - INFO - Filling text in element #createLeadForm_companyName: Company zGbIE
+2025-06-05 21:01:03,691 - pages.base_page - INFO - Filling text in element #createLeadForm_firstName: TestpSfW
+2025-06-05 21:01:03,879 - pages.base_page - INFO - Filling text in element #createLeadForm_lastName: UserKeWY
+2025-06-05 21:01:03,971 - pages.base_page - INFO - Selecting option LEAD_EMPLOYEE from dropdown #createLeadForm_dataSourceId
+2025-06-05 21:01:04,071 - pages.base_page - INFO - Selecting option IND_SOFTWARE from dropdown #createLeadForm_industryEnumId
+2025-06-05 21:01:04,154 - pages.base_page - INFO - Filling text in element #createLeadForm_primaryPhoneNumber: 202-563-3199
+2025-06-05 21:01:04,255 - pages.base_page - INFO - Filling text in element #createLeadForm_primaryEmail: eQjGKuSt@bkpbqt.com
+2025-06-05 21:01:04,345 - pages.base_page - INFO - Clicking element: input[name='submitButton']
+2025-06-05 21:01:37,635 - pages.base_page - ERROR - Failed to get text from element #viewLead_generalProfId_sp: Page.text_content: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("#viewLead_generalProfId_sp")
+
+2025-06-05 21:01:39,567 - root - ERROR - Test failed. Screenshot saved to: screenshots\test_create_and_find_lead[chromium].png
+2025-06-05 21:01:42,439 - root - INFO - Closed browser after test
