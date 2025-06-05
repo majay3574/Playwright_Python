@@ -22,8 +22,15 @@ This is a Python-based test automation framework using Playwright and the Page O
 2. Install dependencies:
 
 ```bash
+
+pip install pytest-playwright
+pip install pytest-html
 pip install -r requirements.txt
 playwright install
+python -m pytest tests/ --browser=chromium --headed --html=report.html
+pytest tests/ --mybrowser=chromium --headless=false --html=report.html --self-contained-html--force
+pip install pytest-playwright pytest-html
+
 ```
 
 ## Project Structure
