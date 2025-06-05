@@ -27,9 +27,20 @@ pip install pytest-playwright
 pip install pytest-html
 pip install -r requirements.txt
 playwright install
-python -m pytest tests/ --browser=chromium --headed --html=report.html
-pytest tests/ --mybrowser=chromium --headless=false --html=report.html --self-contained-html--force
 pip install pytest-playwright pytest-html
+
+```
+
+allure 
+
+```bash
+pip install allure-pytest
+
+allure --version
+
+allure serve allure-results
+
+python -m pytest --html=report.html --self-contained-html --alluredir=allure-results
 
 ```
 
@@ -65,6 +76,9 @@ Run tests in a specific browser:
 npm run test:chrome
 npm run test:firefox
 npm run test:safari
+
+python -m pytest tests/ --browser=chromium --headed --html=report.html
+pytest tests/ --mybrowser=chromium --headless=false --html=report.html --self-contained-html--force
 ```
 
 Run a specific test file:

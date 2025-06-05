@@ -1,7 +1,7 @@
 """
 Find Leads Page module with elements and actions
 """
-from .base_page import BasePage
+from base.base_page import BasePage
 
 class FindLeadsPage(BasePage):
     """Find Leads page class with methods and selectors"""

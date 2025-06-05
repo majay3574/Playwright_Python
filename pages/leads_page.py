@@ -1,8 +1,9 @@
+from base.base_page import BasePage
 """
 Leads Page module with elements and actions
 """
 from asyncio import timeout
-from .base_page import BasePage
+
 
 class LeadsPage(BasePage):
     """Leads page class with methods and selectors"""

@@ -1,7 +1,9 @@
+from base.base_page import BasePage
+
 """
 Home Page module with home page elements and actions
 """
-from .base_page import BasePage
+
 
 class HomePage(BasePage):
     """Home page class with methods and selectors for the home page"""

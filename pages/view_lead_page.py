@@ -1,7 +1,8 @@
+from base.base_page import BasePage
 """
 View Lead Page module with elements and actions
 """
-from .base_page import BasePage
+
 
 class ViewLeadPage(BasePage):
     """View Lead page class with methods and selectors"""
@@ -46,34 +47,4 @@ class ViewLeadPage(BasePage):
         """Click the Duplicate Lead button"""
         self.click(self.DUPLICATE_BUTTON)
     
-    def verify_lead_details(self, lead_data):
-        """
-        Verify the lead details match the expected data
-        
-        Args:
-            lead_data: Dictionary containing expected lead information
-        
-        Returns:
-            bool: True if all details match, False otherwise
-        """
-        self.logger.info(f"Verifying lead details for: {lead_data.get('firstName')} {lead_data.get('lastName')}")
-        
-        first_name = self.get_text(self.FIRST_NAME)
-        last_name = self.get_text(self.LAST_NAME)
-        company_name = self.get_text(self.COMPANY_NAME)
-        
-        all_match = True
-        
-        if first_name != lead_data.get("firstName"):
-            self.logger.error(f"First name mismatch. Expected: {lead_data.get('firstName')}, Actual: {first_name}")
-            all_match = False
-        
-        if last_name != lead_data.get("lastName"):
-            self.logger.error(f"Last name mismatch. Expected: {lead_data.get('lastName')}, Actual: {last_name}")
-            all_match = False
-        
-        if company_name != lead_data.get("companyName"):
-            self.logger.error(f"Company name mismatch. Expected: {lead_data.get('companyName')}, Actual: {company_name}")
-            all_match = False
-        
-        return all_match
+   

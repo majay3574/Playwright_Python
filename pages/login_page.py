@@ -1,7 +1,7 @@
+from base.base_page import BasePage
 """
 Login Page module with login page elements and actions
 """
-from .base_page import BasePage
 
 class LoginPage(BasePage):
     """Login page class with methods and selectors for the login page"""

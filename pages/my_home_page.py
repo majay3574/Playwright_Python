@@ -1,7 +1,7 @@
+from base.base_page import BasePage
 """
 My Home Page module with elements and actions
 """
-from .base_page import BasePage
 
 class MyHomePage(BasePage):
     """My Home page class with methods and selectors"""

@@ -1,8 +1,8 @@
 """
 Create Lead Page module with elements and actions
 """
-from .base_page import BasePage
 
+from base.base_page import BasePage
 class CreateLeadPage(BasePage):
     """Create Lead page class with methods and selectors"""
     

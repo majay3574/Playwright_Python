@@ -1,2 +1,13 @@
 node_modules
 .env
+/allure-results
+/.vscode
+/.idea
+/.DS_Store
+/.cache
+/.next  
+/logs
+/screenshots
+/traces
+/videos
+/report.html
