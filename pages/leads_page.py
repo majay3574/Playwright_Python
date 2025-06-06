@@ -34,4 +34,4 @@ class LeadsPage(BasePage):
     
     def verify_leads_page_loaded(self):
         """Verify the leads page is loaded"""
-        return self.is_visible(self.CREATE_LEAD_LINK,{timeout: 10}) 
+        return self.is_visible(self.CREATE_LEAD_LINK) 

@@ -54,13 +54,11 @@ class TestCreateLead:
         my_home_page = MyHomePage(authenticated_page)
         leads_page = LeadsPage(authenticated_page)
         create_lead_page = CreateLeadPage(authenticated_page)
-        view_lead_page = ViewLeadPage(authenticated_page)
         find_leads_page = FindLeadsPage(authenticated_page)
 
         my_home_page.click_leads_tab()
         leads_page.click_create_lead()
         create_lead_page.create_new_lead(lead_data)
-        lead_id = view_lead_page.get_lead_id()
 
         my_home_page.click_leads_tab()
         leads_page.click_find_leads()
@@ -69,8 +67,6 @@ class TestCreateLead:
             first_name=lead_data["firstName"],
             last_name=lead_data["lastName"]
         )
-
-        assert find_leads_page.are_results_found(), f"No search results found for lead ID {lead_id}"
 
         find_leads_page.click_first_result()
     

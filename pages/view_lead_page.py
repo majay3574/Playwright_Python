@@ -8,7 +8,6 @@ class ViewLeadPage(BasePage):
     """View Lead page class with methods and selectors"""
     
     # Selectors
-    LEAD_ID = "#viewLead_generalProfId_sp"
     FIRST_NAME = "#viewLead_firstName_sp"
     LAST_NAME = "#viewLead_lastName_sp"
     COMPANY_NAME = "#viewLead_companyName_sp"
@@ -20,11 +19,7 @@ class ViewLeadPage(BasePage):
     
     def __init__(self, page):
         super().__init__(page)
-    
-    def get_lead_id(self):
-        """Get the lead ID"""
-        return self.get_text(self.LEAD_ID)
-    
+
     def get_lead_name(self):
         """Get the lead's full name"""
         first_name = self.get_text(self.FIRST_NAME)

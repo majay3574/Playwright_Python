@@ -56,6 +56,7 @@ class BasePage:
     def is_visible(self, selector: str) -> bool:
         """Check if element is visible"""
         try:
+            self.wait_for_element(selector)
             is_visible = self.page.is_visible(selector)
             self.logger.info(f"Element {selector} visibility: {is_visible}")
             return is_visible
