@@ -2,6 +2,7 @@
 Pytest configuration file with Playwright fixtures, Allure & HTML reporting
 """
 
+import configparser
 import os
 import pytest
 import allure
@@ -60,16 +61,34 @@ def browser_context_args():
     }
 
 @pytest.fixture(scope="function")
-def page(request, browser_type_launch_args, browser_context_args, browser_name):
+def page(request, browser_type_launch_args, browser_context_args):
     """Playwright page fixture with tracing, video, screenshot, and Allure reporting"""
-    with sync_playwright() as playwright:
-        browser_launcher = {
-            "chromium": playwright.chromium,
-            "firefox": playwright.firefox,
-            "webkit": playwright.webkit
-        }.get(browser_name, playwright.chromium)
 
-        browser = browser_launcher.launch(**browser_type_launch_args)
+    # Read the browser name from config
+    config = configparser.ConfigParser()
+    config.read("config.properties")
+    browser_name = config.get("default", "browser", fallback="chromium").lower()
+
+    with sync_playwright() as playwright:
+        # Get the correct browser launcher
+        if browser_name == "chrome":
+            browser_type = playwright.chromium
+            launch_args = {"channel": "chrome", **browser_type_launch_args}
+        elif browser_name == "msedge":
+            browser_type = playwright.chromium
+            launch_args = {"channel": "msedge", **browser_type_launch_args}
+        elif browser_name == "firefox":
+            browser_type = playwright.firefox
+            launch_args = browser_type_launch_args
+        elif browser_name == "webkit":
+            browser_type = playwright.webkit
+            launch_args = browser_type_launch_args
+        else:
+            browser_type = playwright.chromium
+            launch_args = browser_type_launch_args
+
+        # Launch the browser
+        browser = browser_type.launch(**launch_args)
         context = browser.new_context(**browser_context_args)
         page = context.new_page()
 
@@ -99,7 +118,7 @@ def page(request, browser_type_launch_args, browser_context_args, browser_name):
             allure.attach.file(
                 trace_path,
                 name="Playwright Trace",
-                attachment_type=allure.attachment_type.ZIP
+                attachment_type=allure.attachment_type.zip
             )
 
         # Screenshot on failure
