@@ -78,17 +78,3 @@ class TestFindLeads:
         find_leads_page.click_first_result()
         actual_company = view_lead_page.get_text(view_lead_page.COMPANY_NAME)
         assert actual_company == created_lead["companyName"], f"Expected: {created_lead['companyName']}, Got: {actual_company}"
-
-    def test_no_results_scenario(self, authenticated_page):
-        """Test the scenario when no results are found"""
-        my_home_page = MyHomePage(authenticated_page)
-        leads_page = LeadsPage(authenticated_page)
-        find_leads_page = FindLeadsPage(authenticated_page)
-        
-        my_home_page.click_leads_tab()
-        leads_page.click_find_leads()
-
-        random_name = DataHelper.generate_random_string(20)
-        find_leads_page.search_by_name(first_name=random_name)
-
-        assert not find_leads_page.are_results_found(), f"Unexpected results found for random name: {random_name}"

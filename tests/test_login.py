@@ -12,7 +12,6 @@ class TestLogin:
         """Test login with valid credentials"""
         # Create page objects
         login_page = LoginPage(page)
-        home_page = HomePage(page)
         
         # Navigate to login page
         login_page.navigate_to_login()
@@ -42,5 +41,6 @@ class TestLogin:
         assert login_page.is_error_displayed(), "Error message not displayed for invalid login"
         
         # Verify error message contains expected text
-        error_message = login_page.get_error_message()
-        assert "The Following Errors Occurred" in error_message, f"Unexpected error message: {error_message}"
+        error_message = login_page.get_error_message().lower()
+        assert "user not found" in error_message, f"'User not found' not in error message: {error_message}"
+        

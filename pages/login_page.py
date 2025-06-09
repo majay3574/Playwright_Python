@@ -13,7 +13,7 @@ class LoginPage(BasePage):
     USERNAME_INPUT = "#username"
     PASSWORD_INPUT = "#password"
     LOGIN_BUTTON = ".decorativeSubmit"
-    ERROR_MESSAGE = ".errorMessage"
+    ERROR_MESSAGE = "//p[contains(text(),'User not found')]"
       
     def __init__(self, page):
         super().__init__(page)

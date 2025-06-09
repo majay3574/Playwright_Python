@@ -6,6 +6,7 @@ import configparser
 import os
 import pytest
 import allure
+from allure_commons.types import AttachmentType
 from datetime import datetime
 from playwright.sync_api import sync_playwright
 import pytest_html
@@ -16,29 +17,12 @@ logger = setup_logger()
 
 def pytest_addoption(parser):
     """Add custom command line options for pytest"""
-    parser.addoption(
-        "--mybrowser",
-        action="store",
-        default="chromium",
-        help="Browser to run tests on: chromium, firefox, or webkit"
-    )
-    parser.addoption(
-        "--headless",
-        action="store",
-        default="false",
-        help="Run tests in headless mode: true or false"
-    )
-    parser.addoption(
-        "--slow_mo",
-        action="store",
-        default=0,
-        type=int,
-        help="Delay between operations in milliseconds"
-    )
+    parser.addoption("--mybrowser", action="store", default="chromium", help="Browser to run tests on")
+    parser.addoption("--headless", action="store", default="false", help="Run tests in headless mode")
+    parser.addoption("--slow_mo", action="store", default=0, type=int, help="Delay between operations in ms")
 
 @pytest.fixture(scope="session")
 def browser_type_launch_args(pytestconfig):
-    """Fixture for browser launch settings"""
     return {
         "headless": pytestconfig.getoption("--headless").lower() == "true",
         "slow_mo": pytestconfig.getoption("--slow_mo")
@@ -46,12 +30,10 @@ def browser_type_launch_args(pytestconfig):
 
 @pytest.fixture(scope="session")
 def browser_name(pytestconfig):
-    """Fixture for browser selection"""
     return pytestconfig.getoption("--mybrowser")
 
 @pytest.fixture(scope="session")
 def browser_context_args():
-    """Fixture for browser context settings"""
     video_dir = "videos"
     os.makedirs(video_dir, exist_ok=True)
     return {
@@ -62,15 +44,15 @@ def browser_context_args():
 
 @pytest.fixture(scope="function")
 def page(request, browser_type_launch_args, browser_context_args):
-    """Playwright page fixture with tracing, video, screenshot, and Allure reporting"""
-
-    # Read the browser name from config
     config = configparser.ConfigParser()
     config.read("config.properties")
+
     browser_name = config.get("default", "browser", fallback="chromium").lower()
+    trace_dir = config.get("default", "trace.dir", fallback="traces")
+
+    os.makedirs(trace_dir, exist_ok=True)
 
     with sync_playwright() as playwright:
-        # Get the correct browser launcher
         if browser_name == "chrome":
             browser_type = playwright.chromium
             launch_args = {"channel": "chrome", **browser_type_launch_args}
@@ -87,15 +69,12 @@ def page(request, browser_type_launch_args, browser_context_args):
             browser_type = playwright.chromium
             launch_args = browser_type_launch_args
 
-        # Launch the browser
         browser = browser_type.launch(**launch_args)
         context = browser.new_context(**browser_context_args)
         page = context.new_page()
 
-        # Start tracing
         context.tracing.start(screenshots=True, snapshots=True, sources=True)
 
-        # Capture console errors and log
         page.on("console", lambda msg: logger.warning(f"Console {msg.type}: {msg.text}")
                 if msg.type == "error" else None)
         logger.info(f"Starting test with {browser_name} browser")
@@ -103,25 +82,18 @@ def page(request, browser_type_launch_args, browser_context_args):
         with allure.step(f"Launch {browser_name} browser and open new page"):
             yield page
 
-        # After test execution:
-
-        # Stop tracing and save
         test_name = request.node.name
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        trace_dir = "traces"
-        os.makedirs(trace_dir, exist_ok=True)
         trace_path = os.path.join(trace_dir, f"{test_name}_{timestamp}.zip")
         context.tracing.stop(path=trace_path)
 
-        # Attach trace to Allure
         if os.path.exists(trace_path):
             allure.attach.file(
                 trace_path,
                 name="Playwright Trace",
-                attachment_type=allure.attachment_type.zip
+                attachment_type="application/zip"
             )
 
-        # Screenshot on failure
         if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
             screenshot_dir = "screenshots"
             os.makedirs(screenshot_dir, exist_ok=True)
@@ -136,12 +108,10 @@ def page(request, browser_type_launch_args, browser_context_args):
             allure.attach.file(
                 screenshot_path,
                 name="Failure Screenshot",
-                attachment_type=allure.attachment_type.PNG
+                attachment_type=AttachmentType.PNG
             )
 
-        # Attach video to Allure
         try:
-            # Close page first to finalize video file
             page.close()
             video_path = None
             if page.video:
@@ -154,11 +124,10 @@ def page(request, browser_type_launch_args, browser_context_args):
                 allure.attach.file(
                     video_path,
                     name="Execution Video",
-                    attachment_type=allure.attachment_type.WEBM
+                    attachment_type=AttachmentType.WEBM
                 )
         except Exception as e:
             logger.error(f"Failed to attach video: {e}")
-            # Make sure to close context/browser even on error
             try:
                 context.close()
                 browser.close()
@@ -167,7 +136,6 @@ def page(request, browser_type_launch_args, browser_context_args):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Hook to attach screenshots to pytest-html on test failure"""
     outcome = yield
     rep = outcome.get_result()
     setattr(item, "rep_" + rep.when, rep)
@@ -180,25 +148,8 @@ def pytest_runtest_makereport(item, call):
             extra.append(pytest_html.extras.html(html))
             rep.extra = extra
 
-# @pytest.fixture(scope="function")
-# def test_data():
-#     """Static test data used across test cases"""
-#     return {
-#         "valid_user": {
-#             "username": "DemoSalesManager",
-#             "password": "crmsfa"
-#         },
-#         "invalid_user": {
-#             "username": "invalid",
-#             "password": "invalid"
-#         }
-#     }
-
-
-
 @pytest.fixture(scope="function")
 def test_data():
-    """Static test data used across test cases"""
     return {
         "valid_user": valid_user,
         "invalid_user": invalid_user
