@@ -22,11 +22,16 @@ This is a Python-based test automation framework using Playwright and the Page O
 2. Install dependencies:
 
 ```bash
+pip install -r requirements.txt
 
 pip install pytest-playwright
-pip install pytest-html
-pip install -r requirements.txt
+
+pip install configparser pytest allure-pytest pytest-html playwright
+
 playwright install
+
+pip install pytest-html
+
 pip install pytest-playwright pytest-html
 
 ```

@@ -1,6 +1,7 @@
 """
 Test module for find leads functionality
 """
+
 import pytest
 from pages.login_page import LoginPage
 from pages.home_page import HomePage
@@ -54,6 +55,7 @@ class TestFindLeads:
         
         my_home_page.click_leads_tab()
         leads_page.click_find_leads()
+        #leads_page.search_created_lead(created_lead["firstName"])
 
         find_leads_page.search_by_name(first_name=created_lead["firstName"])
         assert find_leads_page.are_results_found(), f"No results for first name: {created_lead['firstName']}"

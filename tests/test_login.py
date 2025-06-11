@@ -3,7 +3,6 @@ Test module for login functionality
 """
 import pytest
 from pages.login_page import LoginPage
-from pages.home_page import HomePage
 
 class TestLogin:
     """Test class for login functionality"""
