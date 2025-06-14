@@ -1,0 +1,3 @@
+companyName,firstName,lastName,source,marketingCampaign,industry,phone,email
+TestLeaf,Ajay,Michael,Direct Mail,Automobile,Computer Software,9876543210,ajay@testleaf.com
+Google,John,Doe,Self Generated,Automobile,Finance,9123456789,john.doe@gmail.com

@@ -5,9 +5,29 @@ import json
 import os
 import random
 import string
+import csv
+from pathlib import Path
 
 class DataHelper:
     """Data Helper class for test data management"""
+
+
+    @staticmethod
+    def read_leads_from_csv(file_path):
+        """
+        Read lead data from a CSV file and return a list of dictionaries.
+
+        Args:
+            file_path (str): Path to the CSV file relative to project root.
+
+        Returns:
+            list[dict]: List of dictionaries representing each row of lead data.
+        """
+        abs_path = Path(file_path).resolve()
+        with open(abs_path, mode='r', newline='', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            data = [row for row in reader]
+        return data
     
     @staticmethod
     def load_test_data(file_path):

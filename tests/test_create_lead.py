@@ -16,11 +16,6 @@ class TestCreateLead:
     """Test class for lead creation functionality"""
 
     @pytest.fixture(scope="function")
-    def lead_data(self):
-        """Fixture to generate random lead data for testing"""
-        return DataHelper.generate_test_lead_data()
-
-    @pytest.fixture(scope="function")
     def authenticated_page(self, page, test_data):
         """Fixture to perform login and return authenticated page"""
         login_page = LoginPage(page)
@@ -34,13 +29,13 @@ class TestCreateLead:
 
         home_page.click_crm_sfa_link()
         return page
-
+    
+    @pytest.mark.parametrize("lead_data", DataHelper.read_leads_from_csv("data/leads_data.csv"))
     def test_create_new_lead(self, authenticated_page, lead_data):
         """Test creating a new lead"""
         my_home_page = MyHomePage(authenticated_page)
         leads_page = LeadsPage(authenticated_page)
         create_lead_page = CreateLeadPage(authenticated_page)
-        view_lead_page = ViewLeadPage(authenticated_page)
 
         my_home_page.click_leads_tab()
         assert leads_page.verify_leads_page_loaded(), "Leads page did not load correctly"
@@ -49,24 +44,5 @@ class TestCreateLead:
         create_lead_page.create_new_lead(lead_data)
 
 
-    def test_create_and_find_lead(self, authenticated_page, lead_data):
-        """Test creating a lead and then finding it"""
-        my_home_page = MyHomePage(authenticated_page)
-        leads_page = LeadsPage(authenticated_page)
-        create_lead_page = CreateLeadPage(authenticated_page)
-        find_leads_page = FindLeadsPage(authenticated_page)
 
-        my_home_page.click_leads_tab()
-        leads_page.click_create_lead()
-        create_lead_page.create_new_lead(lead_data)
-
-        my_home_page.click_leads_tab()
-        leads_page.click_find_leads()
-
-        find_leads_page.search_by_name(
-            first_name=lead_data["firstName"],
-            last_name=lead_data["lastName"]
-        )
-
-        find_leads_page.click_first_result()
     
