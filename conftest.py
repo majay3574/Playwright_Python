@@ -13,6 +13,7 @@ import pytest_html
 from utils.logger import setup_logger
 from data.user_credentials import valid_user, invalid_user
 
+
 logger = setup_logger()
 
 def pytest_addoption(parser):
@@ -20,6 +21,9 @@ def pytest_addoption(parser):
     parser.addoption("--mybrowser", action="store", default="chromium", help="Browser to run tests on")
     parser.addoption("--headless", action="store", default="false", help="Run tests in headless mode")
     parser.addoption("--slow_mo", action="store", default=0, type=int, help="Delay between operations in ms")
+
+
+
 
 @pytest.fixture(scope="session")
 def browser_type_launch_args(pytestconfig):
