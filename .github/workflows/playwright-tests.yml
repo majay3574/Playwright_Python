@@ -25,7 +25,7 @@ jobs:
         run: playwright install --with-deps
 
       - name: Run your tests
-        run: pytest --tracing=retain-on-failure
+        run: python -m pytest tests/
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
