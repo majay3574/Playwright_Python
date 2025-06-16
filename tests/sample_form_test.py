@@ -17,6 +17,7 @@ class DataHelper:
 @pytest.mark.parametrize("data", DataHelper.read_form_data_from_csv("data/sample_form_data.csv"))
 @allure.title("Form submission test for {data[first_name]} {data[last_name]}")
 def test_example(page: Page, data) -> None:
+    
     with allure.step("Navigate to Practice Form"):
         page.goto("https://demoqa.com/automation-practice-form")
 
