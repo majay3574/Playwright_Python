@@ -11,8 +11,7 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright
 import pytest_html
 from utils.logger import setup_logger
-from data.user_credentials import valid_user, invalid_user
-
+from data.test_fixture import test_data
 
 logger = setup_logger()
 
@@ -21,9 +20,6 @@ def pytest_addoption(parser):
     parser.addoption("--mybrowser", action="store", default="chromium", help="Browser to run tests on")
     parser.addoption("--headless", action="store", default="false", help="Run tests in headless mode")
     parser.addoption("--slow_mo", action="store", default=0, type=int, help="Delay between operations in ms")
-
-
-
 
 @pytest.fixture(scope="session")
 def browser_type_launch_args(pytestconfig):
@@ -34,7 +30,7 @@ def browser_type_launch_args(pytestconfig):
 
 @pytest.fixture(scope="session")
 def browser_name(pytestconfig):
-    return pytestconfig.getoption("--mybrowser")
+    return pytestconfig.getoption("--mybrowser").lower()
 
 @pytest.fixture(scope="session")
 def browser_context_args():
@@ -42,119 +38,176 @@ def browser_context_args():
     os.makedirs(video_dir, exist_ok=True)
     return {
         "ignore_https_errors": True,
+        "record_video_dir": video_dir,
         "viewport": {"width": 1920, "height": 1080},
-        "record_video_dir": video_dir
     }
 
 @pytest.fixture(scope="function")
-def page(request, browser_type_launch_args, browser_context_args):
+def page(request, browser_type_launch_args, browser_context_args, browser_name):
     config = configparser.ConfigParser()
     config.read("config.properties")
 
-    browser_name = config.get("default", "browser", fallback="chromium").lower()
+    config_browser_name = config.get("default", "browser", fallback=browser_name).lower()
     trace_dir = config.get("default", "trace.dir", fallback="traces")
 
     os.makedirs(trace_dir, exist_ok=True)
 
     with sync_playwright() as playwright:
-        if browser_name == "chrome":
+        # Setup launch args and context args based on browser_name
+        if config_browser_name == "chrome":
             browser_type = playwright.chromium
-            launch_args = {"channel": "chrome", **browser_type_launch_args}
-        elif browser_name == "msedge":
+            launch_args = {
+                "channel": "chrome",
+                **browser_type_launch_args,
+                "args": [
+                    "--start-maximized"
+                ],
+            }
+            context_args = browser_context_args.copy()
+            context_args["viewport"] = None 
+
+        elif config_browser_name == "msedge":
             browser_type = playwright.chromium
-            launch_args = {"channel": "msedge", **browser_type_launch_args}
-        elif browser_name == "firefox":
+            launch_args = {
+                "channel": "msedge",
+                **browser_type_launch_args,
+                "args": [
+                    "--start-maximized",
+                    "--window-size=1920,1080",
+                    "--disable-web-security",
+                    "--no-proxy-server"
+                ],
+            }
+            context_args = browser_context_args.copy()
+            context_args["viewport"] = None 
+
+        elif config_browser_name == "firefox":
             browser_type = playwright.firefox
-            launch_args = browser_type_launch_args
-        elif browser_name == "webkit":
+            launch_args = {
+                **browser_type_launch_args,
+                "args": ["--kiosk"],
+            }
+            context_args = browser_context_args.copy()
+            context_args["viewport"] = None
+
+        elif config_browser_name == "webkit":
             browser_type = playwright.webkit
             launch_args = browser_type_launch_args
+            context_args = browser_context_args.copy()
+            context_args["viewport"] = {"width": 1280, "height": 680}
+
         else:
+            # default chromium launch
             browser_type = playwright.chromium
             launch_args = browser_type_launch_args
+            context_args = browser_context_args.copy()
 
         browser = browser_type.launch(**launch_args)
-        context = browser.new_context(**browser_context_args)
+        context = browser.new_context(**context_args)
         page = context.new_page()
 
+        # Start tracing
         context.tracing.start(screenshots=True, snapshots=True, sources=True)
 
-        page.on("console", lambda msg: logger.warning(f"Console {msg.type}: {msg.text}")
-                if msg.type == "error" else None)
-        logger.info(f"Starting test with {browser_name} browser")
+        # Setup console error logging
+        def handle_console(msg):
+            if msg.type == "error":
+                logger.warning(f"Console {msg.type}: {msg.text}")
+        
+        page.on("console", handle_console)
+        logger.info(f"Starting test with {config_browser_name} browser")
 
-        with allure.step(f"Launch {browser_name} browser and open new page"):
+        with allure.step(f"Launch {config_browser_name} browser and open new page"):
             yield page
 
+        # Cleanup and reporting
         test_name = request.node.name
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         trace_path = os.path.join(trace_dir, f"{test_name}_{timestamp}.zip")
-        context.tracing.stop(path=trace_path)
-
-        if os.path.exists(trace_path):
-            allure.attach.file(
-                trace_path,
-                name="Playwright Trace",
-                attachment_type="application/zip"
-            )
-
-        if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
-            screenshot_dir = "screenshots"
-            os.makedirs(screenshot_dir, exist_ok=True)
-            screenshot_path = os.path.join(screenshot_dir, f"{test_name}.png")
-            page.screenshot(path=screenshot_path, full_page=True)
-
-            logger.error(f"Test failed. Screenshot saved to: {screenshot_path}")
-
-            if hasattr(request.node, "add_report_section"):
-                request.node.add_report_section("call", "screenshot", f"file://{screenshot_path}")
-
-            allure.attach.file(
-                screenshot_path,
-                name="Failure Screenshot",
-                attachment_type=AttachmentType.PNG
-            )
-
+        
         try:
-            page.close()
-            video_path = None
+            context.tracing.stop(path=trace_path)
+            
+            if os.path.exists(trace_path):
+                allure.attach.file(
+                    trace_path,
+                    name="Playwright Trace",
+                    attachment_type="application/zip"
+                )
+        except Exception as e:
+            logger.error(f"Failed to save trace: {e}")
+
+        # Handle test failure screenshots
+        if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+            try:
+                screenshot_dir = "screenshots"
+                os.makedirs(screenshot_dir, exist_ok=True)
+                screenshot_path = os.path.join(screenshot_dir, f"{test_name}_{timestamp}.png")
+                page.screenshot(path=screenshot_path, full_page=True)
+
+                logger.error(f"Test failed. Screenshot saved to: {screenshot_path}")
+
+                # Attach to Allure report
+                allure.attach.file(
+                    screenshot_path,
+                    name="Failure Screenshot",
+                    attachment_type=AttachmentType.PNG
+                )
+                
+                # Store screenshot path for HTML report
+                setattr(request.node, 'screenshot_path', screenshot_path)
+                
+            except Exception as e:
+                logger.error(f"Failed to capture screenshot: {e}")
+
+        # Handle video recording
+        video_path = None
+        try:
             if page.video:
                 video_path = page.video.path()
+        except Exception as e:
+            logger.error(f"Failed to get video path: {e}")
 
+        # Close browser resources
+        try:
+            page.close()
             context.close()
             browser.close()
+        except Exception as e:
+            logger.error(f"Failed to close browser resources: {e}")
 
-            if video_path and os.path.exists(video_path):
+        # Attach video to Allure if available
+        if video_path and os.path.exists(video_path):
+            try:
                 allure.attach.file(
                     video_path,
                     name="Execution Video",
                     attachment_type=AttachmentType.WEBM
                 )
-        except Exception as e:
-            logger.error(f"Failed to attach video: {e}")
-            try:
-                context.close()
-                browser.close()
-            except:
-                pass
+            except Exception as e:
+                logger.error(f"Failed to attach video: {e}")
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
+    """Hook to handle test reporting and screenshot attachment for HTML reports"""
     outcome = yield
     rep = outcome.get_result()
     setattr(item, "rep_" + rep.when, rep)
 
     if rep.when == "call" and rep.failed:
-        screenshot_path = f"screenshots/{item.name}.png"
-        if os.path.exists(screenshot_path):
-            extra = getattr(rep, "extra", [])
-            html = f'<div><img src="{screenshot_path}" alt="screenshot" style="width:400px;" onclick="window.open(this.src)" /></div>'
-            extra.append(pytest_html.extras.html(html))
-            rep.extra = extra
-
-@pytest.fixture(scope="function")
-def test_data():
-    return {
-        "valid_user": valid_user,
-        "invalid_user": invalid_user
-    }
+        # Check if screenshot was captured during test execution
+        if hasattr(item, 'screenshot_path'):
+            screenshot_path = item.screenshot_path
+            if os.path.exists(screenshot_path):
+                # Add screenshot to HTML report
+                extra = getattr(rep, "extra", [])
+                html = f'''
+                <div>
+                    <img src="{screenshot_path}" alt="failure screenshot" 
+                         style="width:600px;height:auto;border:1px solid #ddd;cursor:pointer;" 
+                         onclick="window.open(this.src)" />
+                    <p><strong>Screenshot:</strong> {screenshot_path}</p>
+                </div>
+                '''
+                extra.append(pytest_html.extras.html(html))
+                rep.extra = extra
