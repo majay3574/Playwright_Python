@@ -15,7 +15,7 @@ class BasePage:
     def _read_timeout(self) -> int:
         config = configparser.ConfigParser()
         config.read("config.properties")
-        return int(config.get("default", "action.timeout", fallback="30000"))
+        return int(config.get("default", "action.timeout", fallback="60000"))
 
     def navigate(self, url: str):
         with allure.step(f"Navigate to URL: {url}"):
