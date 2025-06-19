@@ -49,7 +49,8 @@ def page(request, browser_type_launch_args, browser_context_args, browser_name):
 
     config_browser_name = config.get("default", "browser", fallback=browser_name).lower()
     trace_dir = config.get("default", "trace.dir", fallback="traces")
-
+    test_timeout = config.getint("default", "test.timeout", fallback=90000)
+    
     os.makedirs(trace_dir, exist_ok=True)
 
     with sync_playwright() as playwright:
@@ -105,6 +106,7 @@ def page(request, browser_type_launch_args, browser_context_args, browser_name):
         browser = browser_type.launch(**launch_args)
         context = browser.new_context(**context_args)
         page = context.new_page()
+        page.set_default_timeout(test_timeout)
 
         # Start tracing
         context.tracing.start(screenshots=True, snapshots=True, sources=True)
